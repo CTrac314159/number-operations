@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <limits>
 
 void isPrime(int x)
 {
