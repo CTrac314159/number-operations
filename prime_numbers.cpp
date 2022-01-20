@@ -19,9 +19,24 @@ void isPrime(int x)
 
 int user_input()
 {
-	std::cout << "Enter an integer: "; // Ask user to input integer
 	int x{};
-	std::cin >> x;
+	bool valid_input{ false }; // Valid input Boolean, loop continues while false (invalid input)
+
+	do
+	{
+		std::cout << "Enter an integer: "; // Ask user to input integer
+		std::cin >> x;
+
+		if (std::cin.fail()) // Clear and ignore the input if invalid
+		{
+			std::cout << "Invalid input. It needs to be an integer.\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		}
+		else
+			valid_input = true; // Set to True if the input is a valid integer
+	} 
+	while (valid_input == false);
 
 	return x;
 }
