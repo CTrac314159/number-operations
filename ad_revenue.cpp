@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-struct Advertising // Define the structure with the three input members
+struct Advertising // Define the structure with the three input members, default to zero
 {
     int shownAds{};
     double clickedPercent{};
@@ -24,7 +24,7 @@ Advertising getAdvertising() // Get user input for three structure members
     return ad_input;
 }
 
-void printAdvertising(Advertising ad_user) // Print user input along with the total daily revenue (while dividing clickedPercent by 100)
+void printAdvertising(const Advertising& ad_user) // Print user input along with the total daily revenue (while dividing clickedPercent by 100)
 {
     std::cout << '\n';
     std::cout << "Number of ads shown: " << ad_user.shownAds << '\n';
