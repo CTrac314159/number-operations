@@ -1,57 +1,80 @@
 #include <iostream>
+#include <functional>
 
-template <typename T> // Template function to add two numbers of same type
-T add(T x, T y)
+// Function to add two numbers. Parameters and return value are ensured double types.
+double add(double x, double y)
 {
-    return x + y;
+    return (x + y);
 }
 
-template <typename U> // Template function to multiply number of any type and integer
-U mult(U x, int y)
+// Function to multiply two numbers. Parameters and return value are ensured double types.
+double mult(double x, double y)
 {
-    return x * y;
+    return (x * y);
 }
 
-template <typename V, typename W> // Template function to subtract numbers of different types. Infer return type with "auto" keyword
-auto subt(V x, W y)
+// Function to divide two numbers. Parameters and return value are ensured double types.
+double divis(double x, double y)
 {
-    return x - y;
+    return (x / y);
 }
 
-double userInput() // Convert user input to a double initially to avoid data loss if later converted to an integer
+// Function to subtract two numbers. Parameters and return value are ensured double types.
+double subt(double x, double y)
+{
+    return (x - y);
+}
+
+double userInput() // Ask user to input number
 {
     std::cout << "Enter a number: "; // Ask user to input number
-    double x{};
+    double x{}; // Convert user input to type double to avoid data loss
     std::cin >> x;
-
+    
     return x;
+}
+
+using ArithmeticFunction = std::function<double(double, double)>; // Type alias for user-selected arithmetic function
+
+// Function to return the pointer to the appropriate operation function based on operator inputted by the user
+ArithmeticFunction getArithmeticFunction(char operate)
+{
+    switch (operate)
+    {
+    case '+':
+        return &add;
+    case '-':
+        return &subt;
+    case '*':
+        return &mult;
+    case '/':
+        return &divis;
+    default: // Return a null pointer if operator is none of the above
+        return nullptr;
+    }
 }
 
 int main()
 {   
-    auto x{ userInput() }; // Ask user to input two numbers, then infer their data types
-    auto y{ userInput() };
-    
-    std::cout << "Choose an arithmetic operator (+, *, -): "; // Ask user to choose an operator
-    char operation{};
-    std::cin >> operation;
-
-    switch (operation) // Switch sequence based on requested user operator to call the appropriate template function, output the result
+    while (true)
     {
-    case '+': // Addition
-        std::cout << "Both numbers will be converted to the same type.\n";
-        std::cout << "The sum of the numbers is " << add(x, y);
-        break;
-    case '*': // Multiplication
-        std::cout << "If not already, the second number will be converted to an integer.\n";
-        std::cout << "The product of the numbers is " << mult(x, static_cast<int>(y));
-        break;
-    case '-': // Subtraction
-        std::cout << "The difference between the numbers is " << subt(x, y);
-        break;
-    default: // Invalid operator
-        std::cout << "Invalid operator. Please try again.";
-        break;
+        auto x{ userInput() }; // Ask user to input two numbers
+        auto y{ userInput() };
+        
+        std::cout << "Choose an arithmetic operator (+, *, /, -): "; // Ask user to choose an operator
+        char userOperator{};
+        std::cin >> userOperator;
+        ArithmeticFunction operation{getArithmeticFunction(userOperator)}; // Call appropriate operation function, output result if not null
+        if (operation)
+            std::cout << x << userOperator << y << " = " << operation(x, y) << '\n';
+
+        std::cout << '\n'; // Ask the user if they want to perform another calculation
+        std::cout << "Do you want to perform another arithmetic operation (Y or N)? ";
+        char keepOperating{};
+        std::cin >> keepOperating;
+        
+        if (keepOperating == 'N') // If not, terminate the program
+            return 0;
     }
 
     return 0;
